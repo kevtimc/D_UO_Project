@@ -198,17 +198,20 @@ public class AddCustomerForm extends javax.swing.JFrame {
         {
             try {
                 PreparedStatement insertStatement = conn.prepareStatement("INSERT INTO CUSTOMER "
-                        + "(NAME, ADDRESS, NOTE, CONTACT_NAME) VALUES (?, ?, ?, ?)");
+                        + "(NAME, ADDRESS, NOTE, CONTACT_NAME, PHONE, TYPE, PROSPECT) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 insertStatement.setString(1, customerName);
                 insertStatement.setString(2, address);
-                insertStatement.setInt(3, 1);
+                insertStatement.setString(3, "ggg");
                 insertStatement.setString(4, "TESTNAME");
+                insertStatement.setString(5, " gfh");
+                insertStatement.setString(6, CustTypeCombo.getSelectedItem().toString());
+                insertStatement.setString(7, "Y");
                 insertStatement.execute();
                 
-                Statement createContactTbl = conn.createStatement();
-                createContactTbl.executeQuery("CREATE TABLE aab (CONTACT VARCHAR(40) NOT NULL, CON_ID INT NOT NULL PRIMARY KEY)");
+                //Statement createContactTbl = conn.createStatement();
+                //createContactTbl.executeQuery("CREATE TABLE aab (CONTACT VARCHAR(40) NOT NULL, CON_ID INT NOT NULL PRIMARY KEY)");
                 
-                System.out.println("Created table in given database...");
+                System.out.println(CustTypeCombo.getSelectedItem().toString());
                 
             } catch(SQLException ex) { }
         }
