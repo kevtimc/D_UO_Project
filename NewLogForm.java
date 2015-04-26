@@ -8,11 +8,13 @@ package duralene;
 import static duralene.MainFrame.DB_PASS;
 import static duralene.MainFrame.DB_URL;
 import static duralene.MainFrame.DB_USER;
+import java.sql.Timestamp;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 
 /**
  *
@@ -21,6 +23,7 @@ import java.sql.ResultSet;
 public class NewLogForm extends javax.swing.JFrame {
 
     private static String name, address;
+    private static Date currentDate;
     /**
      * Creates new form NewLogForm
      */
@@ -30,6 +33,7 @@ public class NewLogForm extends javax.swing.JFrame {
         this.name = name;
         this.address = address;
         NameLbl.setText(name);
+        currentDate = new java.util.Date();
         
     }
 
@@ -136,21 +140,17 @@ public class NewLogForm extends javax.swing.JFrame {
         try {
             if(content != null) {
                 Connection connect = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-                PreparedStatement getCustomer = null;
-                String selectID = "SELECT ID FROM CUSTOMER WHERE"
-                        + " NAME = '" + name + "' AND ADDRESS = '" + address + "'";
-                
-                getCustomer = connect.prepareStatement(selectID);
-                ResultSet customerResult = getCustomer.executeQuery(selectID);
-                customerResult.next();
-                id = Integer.parseInt(customerResult.getString(1));
-                
-                
-                //String insertLog = "INSERT INTO NOTE (ID, LOG_DATE, CONTENT) VALUES ('"
-                        //+ id + "', '" + date + "', '" + content + "')";
+                PreparedStatement insertLog = connect.prepareStatement("INSERT INTO LOG"
+                        + " (LOG_DATE, CONTENT, CUST_NAME, CUST_ADDRESS) VALUES (?, ?, ?, ?)");
+                insertLog.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+                insertLog.setString(2, content);
+                insertLog.setString(3, this.name);
+                insertLog.setString(4, this.address);
+                insertLog.execute();
             }
             
             this.dispose();
+            
         } catch(SQLException ex) { }
     }                                            
 
