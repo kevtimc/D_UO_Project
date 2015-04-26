@@ -12,6 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.table.AbstractTableModel;
+import javax.swing.JOptionPane;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -21,7 +26,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     public static final String DB_URL = "jdbc:oracle:thin:@localhost:1524:duratest";
     public static final String DB_USER = "";
-    public static final String DB_PASS = "";
+    public static final String DB_PASS = """;
     public static String noteContent;
     Connection connect;
 
@@ -39,39 +44,55 @@ public class MainFrame extends javax.swing.JFrame {
         
         populateTable("");
         
-        /*ResultSet rs = statement.executeQuery("SELECT * FROM CUSTOMER");
-        
-        rs.next();
-        this.MainTable.setValueAt(rs.getString(1), 0, 0);
-        rs.next();
-        this.MainTable.setValueAt(rs.getString(1), 1, 0);
-        
-        rs = statement.executeQuery("SELECT CONTACT_NAME FROM CUSTOMER");
-        rs.next();
-        this.MainTable.setValueAt(rs.getString(1), 0, 1);
-        rs.next();
-        this.MainTable.setValueAt(rs.getString(1), 1, 1);*/
-        
-
-
+        this.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent we)
+        { 
+            String ExitButtons[] = {"Yes","No"};
+            int exit = JOptionPane.showOptionDialog(null, 
+            "Are you sure you want to exit?", "Duralene ", 
+           JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, 
+           ExitButtons,ExitButtons[1]);
+        if(exit==0)
+        {
+         System.exit(0);          
+        }
+        }});
     }
     
     public void populateTable(String condition) throws SQLException {
         
         Statement statement = connect.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM CUSTOMER ORDER BY NAME");
+        ResultSet rs = statement.executeQuery("SELECT * FROM CUSTOMER ORDER BY LOWER(NAME)");
         int nameCol, contactCol, phoneCol, addressCol, i = 0; 
         
         nameCol = rs.findColumn("NAME");
-        contactCol = rs.findColumn("CONTACT_NAME");
         addressCol = rs.findColumn("ADDRESS");
        
         rs.next();
         while(!rs.isAfterLast())
         {
-            this.MainTable.setValueAt(rs.getString(nameCol), i, nameCol-1);
-            this.MainTable.setValueAt(rs.getString(contactCol), i, contactCol-1);
-            this.MainTable.setValueAt(rs.getString(addressCol), i, addressCol-1);
+            this.MainTable.setValueAt(rs.getString(nameCol), i, 0);
+            this.MainTable.setValueAt(rs.getString(addressCol), i, 3);
+            rs.next();
+            i++;
+        }
+    }
+    
+    public void populateTable() throws SQLException {
+        
+        Statement statement = connect.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM CUSTOMER ORDER BY LOWER(NAME)");
+        int nameCol, contactCol, phoneCol, addressCol, i = 0; 
+        
+        nameCol = rs.findColumn("NAME");
+        addressCol = rs.findColumn("ADDRESS");
+       
+        rs.next();
+        while(!rs.isAfterLast())
+        {
+            this.MainTable.setValueAt(rs.getString(nameCol), i, 0);
+            this.MainTable.setValueAt(rs.getString(addressCol), i, 3);
             rs.next();
             i++;
         }
@@ -91,7 +112,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         MainTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        AddCustomerButton = new javax.swing.JButton();
         Search_Txt = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         clear_But = new javax.swing.JButton();
@@ -101,7 +122,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        HomeButton = new javax.swing.JButton();
         NewLogButton = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -113,7 +134,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenu1.setText("jMenu1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Duralene");
         setBackground(new java.awt.Color(153, 153, 0));
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
@@ -356,14 +377,14 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(MainTable);
         MainTable.getAccessibleContext().setAccessibleName("MainTable");
 
-        jButton1.setBackground(new java.awt.Color(153, 153, 153));
-        jButton1.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
-        jButton1.setText("Add Customer");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.setOpaque(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        AddCustomerButton.setBackground(new java.awt.Color(153, 153, 153));
+        AddCustomerButton.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
+        AddCustomerButton.setText("Add Customer");
+        AddCustomerButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        AddCustomerButton.setOpaque(false);
+        AddCustomerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                AddCustomerButtonActionPerformed(evt);
             }
         });
 
@@ -437,14 +458,14 @@ public class MainFrame extends javax.swing.JFrame {
         jButton9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton9.setOpaque(false);
 
-        jButton10.setBackground(new java.awt.Color(153, 153, 153));
-        jButton10.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
-        jButton10.setText("Home");
-        jButton10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton10.setOpaque(false);
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        HomeButton.setBackground(new java.awt.Color(153, 153, 153));
+        HomeButton.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
+        HomeButton.setText("Home");
+        HomeButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        HomeButton.setOpaque(false);
+        HomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                HomeButtonActionPerformed(evt);
             }
         });
 
@@ -474,7 +495,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HomeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(NewLogButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
@@ -484,7 +505,7 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
-                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(HomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -529,7 +550,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AddCustomerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -556,7 +577,7 @@ public class MainFrame extends javax.swing.JFrame {
                                     .addComponent(clear_But, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(AddCustomerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)))
@@ -603,6 +624,7 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
+        
     private void Search_TxtActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
     }                                          
@@ -611,9 +633,18 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                          
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void HomeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-    }                                         
+        //clear the search txt
+        clear_ButActionPerformed(new java.awt.event.ActionEvent
+        (this, java.awt.event.ActionEvent.ACTION_PERFORMED, null));
+        
+        try {
+            populateTable();
+        } catch (SQLException ex) { }
+        
+         ((AbstractTableModel) MainTable.getModel()).fireTableDataChanged();
+    }                                          
 
     private void clear_ButActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
@@ -621,16 +652,16 @@ public class MainFrame extends javax.swing.JFrame {
         
     }                                         
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void AddCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
-        try { 
+        try {
             AddCustomerForm AddCustForm = new AddCustomerForm();
             AddCustForm.setLocationRelativeTo(null);  // center frame
-            this.setEnabled(false);
+            //this.setEnabled(false);
             AddCustForm.setVisible(true);
         } catch (SQLException ex) { }
         
-    }                                        
+    }                                                 
 
     private void NewLogButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         // TODO add your handling code here:
@@ -698,12 +729,12 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton AddCustomerButton;
+    private javax.swing.JButton HomeButton;
     private javax.swing.JTable MainTable;
     private javax.swing.JButton NewLogButton;
     private javax.swing.JTextField Search_Txt;
     private javax.swing.JButton clear_But;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
