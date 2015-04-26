@@ -19,9 +19,10 @@ import java.sql.Statement;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    public static final String DB_URL = "";
-    public static final String DB_USER = "";
-    public static final String DB_PASS = "";
+    public static final String DB_URL = "jdbc:oracle:thin:@localhost:1524:duratest";
+    public static final String DB_USER = "System";
+    public static final String DB_PASS = "Hayley1989";
+    public static String noteContent;
     Connection connect;
 
     /**
@@ -101,7 +102,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        NewLogButton = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
@@ -447,15 +448,15 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(153, 153, 153));
-        jButton5.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
-        jButton5.setText("New Log");
-        jButton5.setToolTipText("");
-        jButton5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton5.setOpaque(false);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        NewLogButton.setBackground(new java.awt.Color(153, 153, 153));
+        NewLogButton.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
+        NewLogButton.setText("New Log");
+        NewLogButton.setToolTipText("");
+        NewLogButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        NewLogButton.setOpaque(false);
+        NewLogButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                NewLogButtonActionPerformed(evt);
             }
         });
 
@@ -474,7 +475,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(NewLogButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
                 .addContainerGap())
@@ -487,7 +488,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NewLogButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -623,20 +624,33 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
         try { 
-            AddCustomerForm f = new AddCustomerForm();
-            f.setLocationRelativeTo(null);  // center frame
+            AddCustomerForm AddCustForm = new AddCustomerForm();
+            AddCustForm.setLocationRelativeTo(null);  // center frame
             this.setEnabled(false);
-            f.setVisible(true);
+            AddCustForm.setVisible(true);
         } catch (SQLException ex) { }
         
     }                                        
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void NewLogButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         // TODO add your handling code here:
-        NewLogForm f = new NewLogForm();
-        f.setLocationRelativeTo(null);  // center frame
-        f.setVisible(true);
-    }                                        
+        int selRow = MainTable.getSelectedRow();
+        int nameCol = 0, addressCol = 3;
+        String selName, selAddress;
+        
+        if(selRow != -1)
+        {
+        
+            NewLogForm newLog = new NewLogForm(MainTable.getValueAt
+                (selRow, nameCol).toString(), MainTable.getValueAt
+                (selRow, addressCol).toString());
+            
+            newLog.setLocationRelativeTo(null);  // center frame
+            newLog.setVisible(true);
+            
+            System.out.println(noteContent);
+        }
+    }                                            
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
@@ -685,12 +699,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify                     
     private javax.swing.JTable MainTable;
+    private javax.swing.JButton NewLogButton;
     private javax.swing.JTextField Search_Txt;
     private javax.swing.JButton clear_But;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
