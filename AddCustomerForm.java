@@ -189,10 +189,11 @@ public class AddCustomerForm extends javax.swing.JFrame {
         String customerName = CompNameTextField.getText();
         String address = AddressTextField.getText();
         int rowCount = AddCustTable.getRowCount(), columnCount = AddCustTable.getColumnCount();
-        boolean isProspect = ProspectCheckBox.isSelected(), isEmptyRow;
+        boolean isProspect = ProspectCheckBox.isSelected();
         String tblPlaceholder[][] = new String[rowCount][columnCount];
         
-        for(int i = 0; i < rowCount; i++) {
+        for(int i = 0; i < rowCount; i++) 
+        {
             for(int j = 0; j < columnCount; j++)
             {
                 tblPlaceholder[i][j] = "";
@@ -203,9 +204,8 @@ public class AddCustomerForm extends javax.swing.JFrame {
         {
             for(int j = 0; j < columnCount; j++)
             {
-                if (AddCustTable.getValueAt(i, j) != null) {
+                if (AddCustTable.getValueAt(i, j) != null)
                     tblPlaceholder[i][j] = AddCustTable.getValueAt(i, j).toString();
-                }
             }
         }      
         
@@ -216,22 +216,16 @@ public class AddCustomerForm extends javax.swing.JFrame {
         {
             try {
                 PreparedStatement insertStatement = conn.prepareStatement("INSERT INTO CUSTOMER "
-                        + "(NAME, ADDRESS, NOTE, CONTACT_NAME, PHONE, TYPE, PROSPECT) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                        + "(NAME, ADDRESS, TYPE, PROSPECT) VALUES (?, ?, ?, ?)");
                 insertStatement.setString(1, customerName);
                 insertStatement.setString(2, address);
-                insertStatement.setString(3, "ggg");
-                insertStatement.setString(4, "TESTNAME");
-                insertStatement.setString(5, " gfh");
-                insertStatement.setString(6, CustTypeCombo.getSelectedItem().toString());
-                insertStatement.setString(7, "Y");
+                insertStatement.setString(3, CustTypeCombo.getSelectedItem().toString());
+                insertStatement.setString(4, "Y");
                 insertStatement.execute();
-                
-                //PreparedStatement createLogTbl = conn.prepareStatement();
-                
-            } catch(SQLException ex) { }
+                dispose();               
+            } catch(SQLException ex) { System.out.println("SQL CONNECT Error");}
+            
         }
-        
-        this.dispose();
     }                                            
 
     /**
