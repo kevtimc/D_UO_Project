@@ -20,8 +20,8 @@ import java.sql.Statement;
 public class MainFrame extends javax.swing.JFrame {
 
     public static final String DB_URL = "jdbc:oracle:thin:@localhost:1524:duratest";
-    public static final String DB_USER = "System";
-    public static final String DB_PASS = "Hayley1989";
+    public static final String DB_USER = "";
+    public static final String DB_PASS = "";
     public static String noteContent;
     Connection connect;
 
