@@ -188,8 +188,26 @@ public class AddCustomerForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         String customerName = CompNameTextField.getText();
         String address = AddressTextField.getText();
-        boolean isProspect = ProspectCheckBox.isSelected();
-
+        int rowCount = AddCustTable.getRowCount(), columnCount = AddCustTable.getColumnCount();
+        boolean isProspect = ProspectCheckBox.isSelected(), isEmptyRow;
+        String tblPlaceholder[][] = new String[rowCount][columnCount];
+        
+        for(int i = 0; i < rowCount; i++) {
+            for(int j = 0; j < columnCount; j++)
+            {
+                tblPlaceholder[i][j] = "";
+            }
+        }
+        
+        for(int i = 0; i < rowCount; i++)
+        {
+            for(int j = 0; j < columnCount; j++)
+            {
+                if (AddCustTable.getValueAt(i, j) != null) {
+                    tblPlaceholder[i][j] = AddCustTable.getValueAt(i, j).toString();
+                }
+            }
+        }      
         
         if(customerName.equals("") || address.equals("")) {
             System.out.println("ERR");
@@ -208,10 +226,7 @@ public class AddCustomerForm extends javax.swing.JFrame {
                 insertStatement.setString(7, "Y");
                 insertStatement.execute();
                 
-                //Statement createContactTbl = conn.createStatement();
-                //createContactTbl.executeQuery("CREATE TABLE aab (CONTACT VARCHAR(40) NOT NULL, CON_ID INT NOT NULL PRIMARY KEY)");
-                
-                System.out.println(CustTypeCombo.getSelectedItem().toString());
+                //PreparedStatement createLogTbl = conn.prepareStatement();
                 
             } catch(SQLException ex) { }
         }
