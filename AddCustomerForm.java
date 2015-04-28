@@ -22,7 +22,7 @@ import java.sql.PreparedStatement;
  */
 public class AddCustomerForm extends javax.swing.JFrame {
 
-    Connection conn;
+    Connection connect;
     /**
      * Creates new form AddCustomerForm
      */
@@ -32,8 +32,7 @@ public class AddCustomerForm extends javax.swing.JFrame {
         // Load Oracle JDBC Driver
         DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
         // Connect to Oracle Database
-        this.conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-        Statement statement = conn.createStatement();
+        this.connect = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
     }
 
     /**
@@ -103,7 +102,7 @@ public class AddCustomerForm extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Contact", "Position", "Phone", "E-mail"
+                "Contact", "Position", "Phone", "Email"
             }
         ));
         AddCustTable.setRowHeight(36);
@@ -186,46 +185,71 @@ public class AddCustomerForm extends javax.swing.JFrame {
 
     private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
         // TODO add your handling code here:
-        String customerName = CompNameTextField.getText();
-        String address = AddressTextField.getText();
+        String customerName = CompNameTextField.getText(), isProspect = "N";
+        String customerAddress = AddressTextField.getText(), currColumn, insertStr;
+        Object currentObj;
         int rowCount = AddCustTable.getRowCount(), columnCount = AddCustTable.getColumnCount();
-        boolean isProspect = ProspectCheckBox.isSelected();
-        String tblPlaceholder[][] = new String[rowCount][columnCount];
+        PreparedStatement insertInfo;
         
-        for(int i = 0; i < rowCount; i++) 
-        {
-            for(int j = 0; j < columnCount; j++)
-            {
-                tblPlaceholder[i][j] = "";
-            }
-        }
+        if(ProspectCheckBox.isSelected())
+            isProspect = "Y";
         
-        for(int i = 0; i < rowCount; i++)
-        {
-            for(int j = 0; j < columnCount; j++)
-            {
-                if (AddCustTable.getValueAt(i, j) != null)
-                    tblPlaceholder[i][j] = AddCustTable.getValueAt(i, j).toString();
-            }
-        }      
-        
-        if(customerName.equals("") || address.equals("")) {
+        if(customerName.equals("") || customerAddress.equals("")) {
             System.out.println("ERR");
         }
         else
         {
             try {
-                PreparedStatement insertStatement = conn.prepareStatement("INSERT INTO CUSTOMER "
+                PreparedStatement insertStatement = connect.prepareStatement("INSERT INTO CUSTOMER "
                         + "(NAME, ADDRESS, TYPE, PROSPECT) VALUES (?, ?, ?, ?)");
                 insertStatement.setString(1, customerName);
-                insertStatement.setString(2, address);
+                insertStatement.setString(2, customerAddress);
                 insertStatement.setString(3, CustTypeCombo.getSelectedItem().toString());
-                insertStatement.setString(4, "Y");
-                insertStatement.execute();
-                dispose();               
+                insertStatement.setString(4, isProspect);
+                insertStatement.execute();           
             } catch(SQLException ex) { System.out.println("SQL CONNECT Error");}
-            
         }
+        
+        //REMEBER: Editing during submit error! 
+        for(int i = 0; i < rowCount; i++)
+        {
+            for(int j = 0; j < columnCount; j++)
+            {
+                if (AddCustTable.getValueAt(i, j) != null) {
+                    try { 
+                        //if we encounter a non-null value in a row, insert the whole row
+                        //in INFO and skip to the next row:
+                        
+                        insertStr = "INSERT INTO INFO (" + 
+                                AddCustTable.getColumnName(0).toUpperCase() + ", " +
+                                AddCustTable.getColumnName(1).toUpperCase() + ", " +
+                                AddCustTable.getColumnName(2).toUpperCase() + ", " +
+                                AddCustTable.getColumnName(3).toUpperCase() + ", " +
+                                "CUST_NAME, CUST_ADDRESS, IN_ROW" +
+                                ") VALUES (?, ?, ?, ?, '" + customerName + "', '"  +
+                                 customerAddress + "', '" + i + "')";
+                        System.out.println(insertStr);
+                        insertInfo = connect.prepareStatement(insertStr);
+                       
+                        for(int k = 0; k < columnCount; k++)
+                        {
+                            currentObj = AddCustTable.getValueAt(i, k);
+                            
+                            if(currentObj == null)
+                                insertInfo.setString(k+1, "");
+                            else
+                                insertInfo.setString(k+1, currentObj.toString());
+                        }
+                        
+                        //insertInfo.
+                        insertInfo.execute();
+                        j = columnCount;
+                    
+                    } catch(SQLException ex) { }  
+                }
+            } 
+        }
+        this.dispose();    
     }                                            
 
     /**
