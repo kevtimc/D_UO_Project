@@ -25,8 +25,8 @@ import java.awt.event.WindowEvent;
 public class MainFrame extends javax.swing.JFrame {
 
     public static final String DB_URL = "jdbc:oracle:thin:@localhost:1524:duratest";
-    public static final String DB_USER = "";
-    public static final String DB_PASS = """;
+    public static final String DB_USER = "System";
+    public static final String DB_PASS = "Hayley1989";
     public static String noteContent;
     Connection connect;
 
@@ -120,11 +120,11 @@ public class MainFrame extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
-        jButton7 = new javax.swing.JButton();
+        DisplayInfoButton = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         HomeButton = new javax.swing.JButton();
         NewLogButton = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        ViewLogButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -446,11 +446,16 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        jButton7.setBackground(new java.awt.Color(153, 153, 153));
-        jButton7.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
-        jButton7.setText("Display Info");
-        jButton7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton7.setOpaque(false);
+        DisplayInfoButton.setBackground(new java.awt.Color(153, 153, 153));
+        DisplayInfoButton.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
+        DisplayInfoButton.setText("Display Info");
+        DisplayInfoButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        DisplayInfoButton.setOpaque(false);
+        DisplayInfoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DisplayInfoButtonActionPerformed(evt);
+            }
+        });
 
         jButton9.setBackground(new java.awt.Color(153, 153, 153));
         jButton9.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
@@ -481,11 +486,16 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(153, 153, 153));
-        jButton6.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
-        jButton6.setText("View Logs");
-        jButton6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton6.setOpaque(false);
+        ViewLogButton.setBackground(new java.awt.Color(153, 153, 153));
+        ViewLogButton.setFont(new java.awt.Font("Meiryo UI", 1, 18)); // NOI18N
+        ViewLogButton.setText("View Logs");
+        ViewLogButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ViewLogButton.setOpaque(false);
+        ViewLogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewLogButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -494,10 +504,10 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DisplayInfoButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(HomeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(NewLogButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ViewLogButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -507,11 +517,11 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(62, 62, 62)
                 .addComponent(HomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(DisplayInfoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(NewLogButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ViewLogButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -522,6 +532,11 @@ public class MainFrame extends javax.swing.JFrame {
         jButton8.setText("Price Sheet");
         jButton8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton8.setOpaque(false);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -691,6 +706,27 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                          
 
+    private void DisplayInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        // TODO add your handling code here:
+        DisplayInfoForm newInfo = new DisplayInfoForm();
+        newInfo.setLocationRelativeTo(null);
+        newInfo.setVisible(true);
+    }                                                 
+
+    private void ViewLogButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        // TODO add your handling code here:
+        //ViewLogsForm newViewLog = new ViewLogsForm();
+        //newViewLog.setLocationRelativeTo(null);
+        //newViewLog.setVisible(true);
+    }                                             
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+        NewJFrame n = new NewJFrame();
+        n.setLocationRelativeTo(null);
+        n.setVisible(true);
+    }                                        
+
     /**
      * @param args the command line arguments
      */
@@ -730,14 +766,14 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton AddCustomerButton;
+    private javax.swing.JButton DisplayInfoButton;
     private javax.swing.JButton HomeButton;
     private javax.swing.JTable MainTable;
     private javax.swing.JButton NewLogButton;
     private javax.swing.JTextField Search_Txt;
+    private javax.swing.JButton ViewLogButton;
     private javax.swing.JButton clear_But;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JCheckBox jCheckBox1;
